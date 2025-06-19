@@ -4,7 +4,7 @@ Este proyecto es una API REST construida con Node.js, Express, TypeScript y Pris
 
 ## Estructura del proyecto
 
-```
+```text
 ├── prisma/               # Esquema y migraciones de Prisma
 ├── src/
 │   ├── controllers/      # Lógica de negocio (controladores)
@@ -29,23 +29,17 @@ Este proyecto es una API REST construida con Node.js, Express, TypeScript y Pris
    cd restapi-expressjs-docker
    ```
 
-2. **Construye los contenedores:**
+2. **Construye y levanta los contenedores (esto aplica migraciones automáticamente):**
 
    ```sh
-   docker compose build
-   ```
-
-3. **Levanta los servicios:**
-
-   ```sh
-   docker compose up
+   docker compose up --build
    ```
 
    Esto levantará dos servicios:
    - `express_app`: La API en Node.js
    - `postgres_db`: La base de datos PostgreSQL
 
-4. **La API estará disponible en:**
+3. **La API estará disponible en:**
 
    [http://localhost:3000](http://localhost:3000)
 
@@ -59,13 +53,19 @@ Este proyecto es una API REST construida con Node.js, Express, TypeScript y Pris
 - `POST   /users/auth`    → Login de usuario
 
 ## Notas
+
 - El archivo `.env` contiene la cadena de conexión a la base de datos y no debe subirse al repositorio.
 - Prisma se encarga de la conexión y migraciones de la base de datos.
 - Puedes modificar el esquema en `prisma/schema.prisma` y luego ejecutar las migraciones dentro del contenedor.
+- Las migraciones de Prisma se aplican automáticamente cada vez que se inicia el contenedor de la app, gracias a la configuración en `docker-compose.yml`:
 
-## Migraciones y Prisma
+  ```yaml
+  command: sh -c "pnpm prisma migrate deploy && pnpm start"
+  ```
 
-Para correr migraciones o generar el cliente de Prisma dentro del contenedor, puedes usar:
+## Migraciones y Prisma manuales
+
+Si necesitas correr migraciones o generar el cliente de Prisma manualmente dentro del contenedor, puedes usar:
 
 ```sh
 # Abre una terminal en el contenedor de la app
