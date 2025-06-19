@@ -9,9 +9,10 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/mydb
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/mydb
       - NODE_ENV=production
     restart: unless-stopped
+    command: sh -c "pnpm prisma migrate deploy && pnpm start"
 
   db:
     image: postgres:16
